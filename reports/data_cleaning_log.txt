@@ -1,0 +1,59 @@
+============================================================
+DATA CLEANING LOG
+============================================================
+Raw leads loaded        : 2060 rows, 15 columns
+Activities loaded       : 9035 rows
+Sales reps loaded       : 10 rows
+
+[Duplicates] removed    : 60 duplicate Lead_IDs -> 2000 unique leads
+[Standardise] Industry   : 117 values fixed (24 variants -> 8 clean values)
+[Standardise] Lead_Source: 82 values fixed (20 variants -> 7 clean values)
+[Standardise] Location    : 51 aliases/spacing fixed (Bangalore, Gurugram, New Delhi ...)
+[Missing]     Location    : 59 missing -> filled with 'Unknown' (kept honest, not guessed)
+[Dates]       Lead_Created_Date  : 33 DD/MM/YYYY values converted to ISO
+[Dates]       Next_Follow_Up_Date: 31 DD/MM/YYYY values converted to ISO
+[Missing]     Revenue     : 82 missing -> median of same Company_Size band (flagged in Revenue_Imputed)
+
+[Features]    engagement metrics built from 9035 activities (186 leads have no activity yet)
+
+============================================================
+VALIDATION CHECKS
+============================================================
+[PASS] Lead_ID is unique
+[PASS] Conversion = Yes only for Won leads
+[PASS] Deal_Value exists only for Proposal/Won
+[PASS] No nulls in key columns
+[PASS] Follow-up dates only for pending statuses
+[PASS] No lead created after today
+[PASS] Lead_Score within 0-100
+[PASS] All Sales_Rep_IDs exist
+
+============================================================
+SUMMARY
+============================================================
+Clean leads saved       : 2000 rows, 39 columns -> dataset/cleaned_leads.csv
+
+Lead category counts:
+Lead_Category
+Hot       63
+Warm     226
+Cold    1711
+
+Conversion by Lead category (does the score work?):
+               leads  won  conversion_%
+Lead_Category                          
+Hot               63   22         34.92
+Warm             226   43         19.03
+Cold            1711   30          1.75
+
+Overall conversion      : 4.75%
+
+Follow-up flags:
+Follow_Up_Flag
+Upcoming               1202
+No Follow-up Needed     339
+Overdue                 294
+Due Today               165
+
+Deal outcome: {'Open': 1661, 'Lost': 244, 'Won': 95}
+Open pipeline value (Proposal stage): Rs 69,670,000
